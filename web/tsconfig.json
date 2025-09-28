@@ -4,5 +4,4 @@
     { "path": "./tsconfig.app.json" },
     { "path": "./tsconfig.node.json" }
   ],
-  "content": ["./index.html","./src/**/*.{ts,tsx}"]
 }
