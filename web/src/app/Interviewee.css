@@ -1,0 +1,89 @@
+/* === Interviewer Dashboard Styles === */
+.dash-wrap {
+  min-height: 100vh;
+  background: #0f0f10;               /* solid dark dashboard bg */
+  color: #f5f5f5;
+  padding: 24px;
+  font-family: system-ui, sans-serif;
+}
+
+/* Header */
+.dash-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+.dash-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+  font-weight: 600;
+}
+
+/* Main grid layout */
+.dash-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(340px, 1fr));
+  gap: 20px;
+}
+
+/* Cards */
+.dash-card {
+  background: rgba(25, 25, 25, 0.95);
+  padding: 22px 24px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2c2c2c;
+}
+
+.dash-card h2 { 
+  margin-top: 0;
+  margin-bottom: 14px;
+  font-size: 1.3rem;
+  font-weight: 600;
+}
+
+/* Input/textarea */
+.dash-input {
+  width: 100%;
+  padding: 14px;
+  background: #111;
+  color: white;
+  border-radius: 8px;
+  border: 1px solid #444;
+  margin-top: 10px;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+/* Action buttons */
+.dash-actions {
+  margin-top: 14px;
+  display: flex;
+  gap: 14px;
+}
+
+.btn {
+  padding: 12px 18px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+  font-size: 0.95rem;
+  transition: background 0.25s ease;
+}
+
+.btn.secondary {
+  background: #007bff;
+  color: white;
+}
+.btn.secondary:hover {
+  background: #005fcc;
+}
+
+.btn.danger {
+  background: #d9534f;
+  color: white;
+}
+.btn.danger:hover {
+  background: #c9302c;
+}

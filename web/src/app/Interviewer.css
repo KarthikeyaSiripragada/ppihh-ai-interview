@@ -1,0 +1,174 @@
+/* ========= Page & Topbar ========= */
+.page {
+  min-height: 100vh;
+  background: radial-gradient(1200px 600px at 20% -10%, #0e1a26 0%, #0b0f14 55%, #090b0f 100%);
+  color: #eef1f5;
+  font-family: Inter, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+
+.topbar {
+  position: sticky; top: 0; z-index: 20;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 16px 24px;
+  border-bottom: 1px solid rgba(255,255,255,.06);
+  background: rgba(10,12,16,.7);
+  backdrop-filter: blur(10px);
+}
+
+.brand { display:flex; gap:10px; align-items:center; font-weight: 700; letter-spacing:.2px; }
+.brand .dot { width: 10px; height:10px; border-radius: 999px; background: #6ee7b7; box-shadow: 0 0 12px #34d399; }
+.actions { display:flex; gap:10px; }
+.chip { padding:6px 10px; border-radius: 999px; background:#121722; border:1px solid rgba(255,255,255,.08); font-size:.85rem; color:#b7c0cc; }
+
+/* ========= Canvas (STACKED) ========= */
+/* ========= Canvas (STACKED, FLEX FULL-WIDTH) ========= */
+.canvas {
+  max-width: 1000px;          /* wider canvas */
+  margin: 28px auto;
+  padding: 0 24px;
+  display: flex;
+  flex-direction: column;     /* stacked vertically */
+  gap: 22px;
+  align-items: stretch;       /* make child cards stretch full width */
+}
+/* Live Question card layout */
+.card.live {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+/* keep the textarea inside the card bounds */
+.textarea {
+  width: 100%;
+  box-sizing: border-box;   /* <-- crucial */
+  min-height: 160px;
+  margin: 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.45);
+  border: 1px solid rgba(255,255,255,0.12);  /* <-- fix: no 'flex' */
+  color: #f2f2f2;
+  font-family: monospace;
+  font-size: 0.95rem;
+  resize: vertical;
+}
+
+/* action row: left (Pause/End) • right (Prev/Next) */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.btn-left, .btn-right { display: flex; gap: 10px; }
+
+/* ========= Card ========= */
+.card {
+  width: 100%;                /* stretch cards */
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 20px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  backdrop-filter: blur(12px);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.45); }
+
+/* Keep headings and layout consistent */
+.card h2 {
+  font-size: 1.1rem;
+  font-weight: 700;
+  color:#e8eef6;
+  margin: 0 0 14px;
+  display:flex; align-items:center; gap:8px;
+}
+
+
+/* ========= Card ========= */
+.card {
+  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
+  border: 1px solid rgba(255,255,255,.10);
+  border-radius: 14px;
+  padding: 18px;
+  box-shadow: 0 8px 30px rgba(0,0,0,.35);
+  backdrop-filter: blur(12px);
+  transition: transform .18s ease, box-shadow .18s ease;
+}
+.card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.45); }
+
+.card h2 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color:#e8eef6;
+  margin: 0 0 12px;
+  display:flex; align-items:center; gap:8px;
+}
+.card h2 .dot { width:8px; height:8px; background:#60a5fa; border-radius:50%; box-shadow:0 0 10px #3b82f6; }
+
+/* ========= Inputs & Textareas ========= */
+/* textarea inside card */
+.textarea {
+  width: 100%;
+  min-height: 140px;
+  margin: 12px 0;
+  padding: 12px;
+  border-radius: 8px;
+  background: rgba(0,0,0,0.45);
+  border: flex 1px solid rgba(255,255,255,0.12);
+  color: #f2f2f2;
+  font-family: monospace;
+  font-size: 0.9rem;
+  resize: vertical;
+}
+
+/* Button row aligned */
+.btn-row {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 10px;
+}
+
+/* ========= Buttons ========= */
+.btn {
+  border:0;
+  padding:10px 14px;
+  border-radius:10px;
+  font-weight:700;
+  cursor:pointer;
+  transition: .18s ease;
+  background:#1b2330; color:#e8eef6;
+  border:1px solid rgba(255,255,255,.10);
+}
+.btn:hover { transform: translateY(-1px); }
+.btn.primary { background:#3b82f6; border-color:#3b82f6; color:white; }
+.btn.primary:hover { filter:brightness(1.05); }
+.btn.danger  { background:#ef4444; border-color:#ef4444; color:white; }
+.btn.ghost   { background:transparent; }
+
+/* ========= Live Question ========= */
+.question {
+  background:#0d1420;
+  border:1px solid rgba(99,102,241,.25);
+  color:#dbe6ff;
+  padding:12px 14px;
+  border-radius:10px;
+  font-weight:600;
+  box-shadow: inset 0 0 0 1px rgba(99,102,241,.08);
+}
+
+/* ========= Evaluation (progress bars) ========= */
+.metric { margin:10px 0 14px; }
+.metric .row {
+  display:flex; justify-content:space-between;
+  font-size:.9rem; color:#c6d0dd; margin-bottom:6px;
+}
+.bar { height:10px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+.fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#5eead4,#22d3ee); }
+.fill.yellow { background:linear-gradient(90deg,#fde047,#f59e0b); }
+.fill.blue   { background:linear-gradient(90deg,#93c5fd,#3b82f6); }
+.fill.purple { background:linear-gradient(90deg,#c084fc,#a855f7); }
+
+/* ========= Utility ========= */
+.row { display:flex; gap:10px; align-items:center; }
+.mute { color:#8fa0b3; font-size:.85rem; }

@@ -1,0 +1,354 @@
+/* Smooth scroll for topnav anchor links */
+/* Ensure full-bleed background and no scrollbars */
+html, body, #root {
+  height: 100%;
+  scroll-behavior: smooth;
+}
+body {
+  margin: 0;
+  background: #000;
+  overflow: hidden;
+}
+
+.logo{
+  width:120px; height:auto;
+  display:block;
+}
+/* ---------- Top Nav ---------- */
+.topnav{
+  position: sticky; top:0; z-index:50;
+  display:flex; justify-content:space-between; align-items:center;
+  padding:12px 8vw; border-bottom:1px solid var(--border);
+  background: linear-gradient(180deg,rgba(15,16,17,.9),rgba(15,16,17,.6));
+  backdrop-filter: blur(8px);
+}
+.brand{font-weight:700}
+.topnav .links{display:flex; gap:16px; align-items:center}
+.topnav a{color:#cfd2d6; text-decoration:none}
+.topnav a:hover{color:#fff}
+.topnav .ghost{padding:8px 12px; border:1px solid var(--border); border-radius:8px}
+.topnav .cta{padding:9px 14px; border-radius:8px; background:var(--primary); color:#fff}
+
+/* ---------- Hero (with bg) ---------- */
+.hero{
+  min-height:100vh;
+  display:grid; grid-template-columns: 1.1fr 0.9fr;
+  gap:28px; align-items:center; padding:64px 8vw;
+}
+.hero.hero-bg{
+  background-image:
+    linear-gradient(rgba(0,0,0,0.55), rgba(0,0,0,0.55)),
+    url("/bg-hero.jpg");
+  background-size: cover; background-position: center; background-repeat: no-repeat;
+}
+.hero-copy{max-width:760px}
+.display{font-size:48px; line-height:1.1; margin:8px 0 12px}
+.lead{font-size:18px; color:var(--muted); margin:0 0 18px}
+.bullets{list-style:none; padding:0; margin:0; display:grid; gap:10px; color:#cfd2d6}
+.badge-lg{
+  display:inline-block; letter-spacing:.12em; font-weight:700;
+  padding:6px 10px; border:1px solid var(--border); border-radius:999px;
+  background:#121317; color:#9aa0a6; margin-bottom:12px;
+}
+
+/* Auth card on hero (login/signup) */
+.glass{
+  background:linear-gradient(180deg,#181a20aa,#14151aee);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 10px 30px rgba(0,0,0,.35);
+  border-radius:16px; padding:22px;
+}
+.auth-card{max-width:420px; width:100%; justify-self:end}
+.tabs{display:flex; gap:8px; margin-bottom:14px}
+.tab{
+  flex:1; padding:10px 12px; border-radius:10px; border:1px solid var(--border);
+  background:#0f1114; color:#cfd2d6; cursor:pointer; transition:.15s ease-in-out;
+}
+.tab.active{background:#1e2633; color:#fff; border-color:#2a3240}
+.label{display:block; font-size:13px; color:#a7abb3; margin:6px 0}
+.input.big{padding:12px 14px; font-size:15px}
+.btn.big{padding:12px 16px; width:100%; margin-top:12px}
+.err{color:var(--danger); margin-top:8px}
+.fineprint{margin-top:10px; color:#8a8f98; font-size:12px}
+
+/* ---------- Sections Shell ---------- */
+.section{padding:72px 8vw; border-top:1px solid var(--border)}
+.section.alt{background:#0c0d10}
+.display-sm{font-size:32px; margin:0 0 10px}
+
+/* ---------- Features (Candidate) ---------- */
+.cards{display:grid; gap:14px; grid-template-columns: repeat(auto-fit,minmax(240px,1fr))}
+.card-lg{
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; padding:16px; transition: transform .15s ease, border-color .15s;
+}
+.card-lg:hover{ transform: translateY(-2px); border-color:#2a3240; }
+
+/* ---------- Interviewer section ---------- */
+.ticks{list-style: "✔  "; padding-left:18px; color:#cfd2d6}
+.section.alt .btn.primary{margin-top:12px}
+
+/* ---------- FAQ ---------- */
+.faq{display:grid; gap:10px}
+.faq-item{
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; padding:12px;
+}
+.faq-item summary{cursor:pointer; font-weight:600}
+.faq-item[open]{border-color:#2a3240}
+
+/* ---------- Pricing (last) ---------- */
+.card-price{
+  background:var(--panel); border:1px solid var(--border);
+  border-radius:12px; padding:18px;
+}
+.card-price h3{margin-top:0}
+.card-price ul{margin:8px 0 16px; padding-left:18px}
+
+/* ---------- Footer ---------- */
+.footer-lite{padding:24px 8vw; color:var(--muted); border-top:1px solid var(--border)}
+
+/* ---------- Responsive ---------- */
+@media (max-width: 900px){
+  .hero{grid-template-columns: 1fr; gap:24px; padding:40px 6vw}
+  .auth-card{justify-self:stretch}
+  .display{font-size:36px}
+  .topnav{padding:10px 6vw}
+  .topnav .links{gap:10px}
+}
+/* Minimal landing */
+.m-hero{
+  min-height:100vh;
+  display:grid; place-items:center;
+  padding:40px 16px;
+  background:
+    linear-gradient(rgba(0,0,0,.55), rgba(0,0,0,.55)),
+    url("/bg-hero.jpg") center/cover no-repeat,
+    var(--bg);
+}
+/* --- Login card container --- */
+.m-card {
+  background: rgba(20, 20, 20, 0.88);   /* dark translucent background */
+  padding: 48px 56px;                   /* bigger padding */
+  border-radius: 16px;                  /* smoother corners */
+  box-shadow: 0 10px 32px rgba(0, 0, 0, 0.7);
+  max-width: 600px;                     /* wider card */
+  width: 100%;
+  text-align: center;
+  backdrop-filter: blur(10px);          /* stronger glass effect */
+  border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+/* --- Title & subtitle --- */
+.m-title {
+  font-size: 2rem;                      /* bigger title */
+  font-weight: 700;
+  margin-bottom: 10px;
+}
+
+.m-sub {
+  font-size: 1.1rem;                    /* slightly larger subtitle */
+  margin-bottom: 24px;
+  color: #ccc;
+}
+
+/* --- Tabs (Candidate / Interviewer) --- */
+.m-tabs {
+  display: flex;
+  gap: 14px;
+  margin: 18px 0;
+}
+
+.m-tab-box {
+  flex: 1;
+  padding: 14px 18px;
+  border: 1px solid var(--border, #444);
+  border-radius: 10px;
+  background: #1c1c1f;
+  color: #ccc;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.25s ease;
+}
+
+.m-tab-box:hover {
+  background: #2a2a30;
+  color: #fff;
+}
+
+.m-tab-box.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+  box-shadow: 0 0 10px rgba(0, 123, 255, 0.6); /* glowing active tab */
+}
+
+/* --- Input & button --- */
+.m-input {
+  width: 100%;
+  padding: 14px 16px;
+  margin: 12px 0;
+  border-radius: 8px;
+  border: 1px solid #444;
+  background: #111;
+  color: #fff;
+  font-size: 1rem;
+}
+
+.m-btn {
+  width: 100%;
+  padding: 16px;
+  border-radius: 10px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  background: #007bff;
+  color: white;
+  border: none;
+  margin-top: 12px;
+  transition: background 0.25s ease;
+}
+
+.m-btn:hover {
+  background: #005fcc;
+}
+
+/* --- Features row at bottom --- */
+.m-feats {
+  display: flex;
+  justify-content: space-around;
+  margin-top: 20px;
+  font-size: 1.1rem;   /* bumped from ~14px → ~18px */
+  color: #ddd;
+  font-weight: 500;   /* optional: makes it look bolder */
+}
+
+
+.m-badge{
+  display:inline-block; font-weight:700; letter-spacing:.08em;
+  padding:4px 8px; border:1px solid var(--border);
+  border-radius:999px; color:#9aa0a6; background:#0f1114;
+}
+.m-title{ margin:10px 0 6px; font-size:28px }
+.m-sub{ margin:0 0 14px; color:var(--muted) }
+
+/* --- Boxed tabs for Candidate / Interviewer --- */
+.m-tabs {
+  display: flex;
+  gap: 10px;
+  margin: 12px 0;
+}
+
+.m-tab-box {
+  flex: 1;
+  padding: 10px 14px;
+  border: 1px solid var(--border, #444);
+  border-radius: 8px;
+  background: #1c1c1f;
+  color: #ccc;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.m-tab-box:hover {
+  background: #26262b;
+  color: #fff;
+}
+
+.m-tab-box.active {
+  background: #007bff;
+  border-color: #007bff;
+  color: #fff;
+  font-weight: 600;
+}
+
+.m-input{
+  width:100%; padding:10px 12px; border-radius:8px;
+  border:1px solid var(--border); background:#0b0c0e; color:#fff;
+}
+.m-err{ color:var(--danger); margin-top:6px }
+
+.m-btn{
+  width:100%; margin-top:10px; padding:11px 14px; border-radius:8px;
+  border:none; background:var(--primary); color:#fff; cursor:pointer;
+}
+
+.m-feats{
+  display:grid; grid-template-columns:repeat(3,1fr); gap:8px;
+  margin-top:14px; color:#cfd2d6; font-size:13px;
+}
+@media (max-width:680px){ .m-feats{ grid-template-columns:1fr; } .m-title{font-size:24px} }
+/* Dashboard wrapper */
+.dash-wrap {
+  min-height: 100vh;
+  background: #0f0f10;
+  color: #f5f5f5;
+  padding: 24px;
+}
+
+/* Header */
+.dash-header {
+  border-bottom: 1px solid #333;
+  padding-bottom: 12px;
+  margin-bottom: 24px;
+}
+.dash-header h1 {
+  margin: 0;
+  font-size: 1.8rem;
+}
+
+/* Main layout */
+.dash-main {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 20px;
+}
+
+/* Cards */
+.dash-card {
+  background: rgba(25, 25, 25, 0.9);
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 18px rgba(0, 0, 0, 0.5);
+  border: 1px solid #2c2c2c;
+}
+
+.dash-card h2 {
+  margin-top: 0;
+  margin-bottom: 12px;
+  font-size: 1.3rem;
+}
+
+/* Input + actions */
+.dash-input {
+  width: 100%;
+  padding: 12px;
+  background: #111;
+  color: white;
+  border-radius: 8px;
+  border: 1px solid #444;
+  margin-top: 10px;
+}
+
+.dash-actions {
+  margin-top: 12px;
+  display: flex;
+  gap: 12px;
+}
+
+.btn {
+  padding: 10px 16px;
+  border-radius: 8px;
+  border: none;
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.btn.secondary { background: #007bff; color: white; }
+.btn.secondary:hover { background: #005fcc; }
+
+.btn.danger { background: #d9534f; color: white; }
+.btn.danger:hover { background: #c9302c; }
