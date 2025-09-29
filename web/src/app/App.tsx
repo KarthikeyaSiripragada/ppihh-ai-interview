@@ -1,5 +1,5 @@
 import { Routes, Route, Navigate } from "react-router-dom";
-import Landing from "./Landing";
+import Landing from "./Login";
 import Interviewee from "./Interviewee";
 import Interviewer from "./Interviewer";
 

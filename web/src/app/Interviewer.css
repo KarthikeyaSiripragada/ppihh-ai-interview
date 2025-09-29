@@ -1,3 +1,6 @@
+/* ========= Global (smooth scroll) ========= */
+html { scroll-behavior: smooth; }
+
 /* ========= Page & Topbar ========= */
 .page {
   min-height: 100vh;
@@ -20,77 +23,43 @@
 .actions { display:flex; gap:10px; }
 .chip { padding:6px 10px; border-radius: 999px; background:#121722; border:1px solid rgba(255,255,255,.08); font-size:.85rem; color:#b7c0cc; }
 
-/* ========= Canvas (STACKED) ========= */
 /* ========= Canvas (STACKED, FLEX FULL-WIDTH) ========= */
+/* Snap scrolling between big cards */
 .canvas {
-  max-width: 1000px;          /* wider canvas */
-  margin: 28px auto;
-  padding: 0 24px;
-  display: flex;
-  flex-direction: column;     /* stacked vertically */
-  gap: 22px;
-  align-items: stretch;       /* make child cards stretch full width */
-}
-/* Live Question card layout */
-.card.live {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
+  /* keep your existing rules… */
+  scroll-snap-type: y proximity;   /* enables section snapping */
+  overflow-y: auto;                 /* allow page scroll when boxes are big */
+  max-height: calc(100vh - 96px);   /* topbar height margin */
+  padding-bottom: 24px;
 }
 
-/* keep the textarea inside the card bounds */
-.textarea {
+/* each card acts like a snap point */
+.card {
+  scroll-snap-align: start;
+}
+
+/* reveal-on-scroll micro-animation */
+.reveal {
+  opacity: 0;
+  transform: translateY(14px);
+  transition: opacity .35s ease, transform .35s ease;
+}
+.reveal.in {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+/* make buttons a touch bigger for tap targets (keeps your style) */
+.btn { padding: 14px 22px; font-size: 1.05rem; border-radius: 12px; }
+
+
+/* ========= Card ========= */
+.card {
   width: 100%;
-  box-sizing: border-box;   /* <-- crucial */
-  min-height: 160px;
-  margin: 0;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(0,0,0,0.45);
-  border: 1px solid rgba(255,255,255,0.12);  /* <-- fix: no 'flex' */
-  color: #f2f2f2;
-  font-family: monospace;
-  font-size: 0.95rem;
-  resize: vertical;
-}
-
-/* action row: left (Pause/End) • right (Prev/Next) */
-.btn-row {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-}
-.btn-left, .btn-right { display: flex; gap: 10px; }
-
-/* ========= Card ========= */
-.card {
-  width: 100%;                /* stretch cards */
   background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
   border: 1px solid rgba(255,255,255,.10);
-  border-radius: 14px;
-  padding: 20px;
-  box-shadow: 0 8px 30px rgba(0,0,0,.35);
-  backdrop-filter: blur(12px);
-  transition: transform .18s ease, box-shadow .18s ease;
-}
-.card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.45); }
-
-/* Keep headings and layout consistent */
-.card h2 {
-  font-size: 1.1rem;
-  font-weight: 700;
-  color:#e8eef6;
-  margin: 0 0 14px;
-  display:flex; align-items:center; gap:8px;
-}
-
-
-/* ========= Card ========= */
-.card {
-  background: linear-gradient(180deg, rgba(255,255,255,.06), rgba(255,255,255,.04));
-  border: 1px solid rgba(255,255,255,.10);
-  border-radius: 14px;
-  padding: 18px;
+  border-radius: 16px;          /* bigger corners */
+  padding: 26px;                /* bigger box */
   box-shadow: 0 8px 30px rgba(0,0,0,.35);
   backdrop-filter: blur(12px);
   transition: transform .18s ease, box-shadow .18s ease;
@@ -98,43 +67,43 @@
 .card:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(0,0,0,.45); }
 
 .card h2 {
-  font-size: 1.05rem;
+  font-size: 1.2rem;            /* larger heading */
   font-weight: 700;
   color:#e8eef6;
-  margin: 0 0 12px;
+  margin: 0 0 16px;
   display:flex; align-items:center; gap:8px;
 }
 .card h2 .dot { width:8px; height:8px; background:#60a5fa; border-radius:50%; box-shadow:0 0 10px #3b82f6; }
 
+/* Live Question card layout */
+.card.live { display: flex; flex-direction: column; gap: 14px; }
+
 /* ========= Inputs & Textareas ========= */
-/* textarea inside card */
-.textarea {
-  width: 100%;
-  min-height: 140px;
-  margin: 12px 0;
-  padding: 12px;
-  border-radius: 8px;
-  background: rgba(0,0,0,0.45);
-  border: flex 1px solid rgba(255,255,255,0.12);
-  color: #f2f2f2;
-  font-family: monospace;
-  font-size: 0.9rem;
-  resize: vertical;
+.input, .textarea, .card input, .card select {
+  width:100%;
+  box-sizing: border-box;
+  border:1px solid rgba(255,255,255,.14);
+  background:#0c121a;
+  color:#f2f5f9;
+  border-radius:12px;
+  padding:14px;
+  font-size:1rem;               /* bigger input text */
 }
 
-/* Button row aligned */
-.btn-row {
-  display: flex;
-  justify-content: space-between;
-  margin-top: 10px;
+.textarea {
+  min-height: 200px;            /* bigger editor */
+  margin: 0;
+  resize: vertical;
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, "Courier New", monospace;
 }
 
 /* ========= Buttons ========= */
 .btn {
   border:0;
-  padding:10px 14px;
-  border-radius:10px;
+  padding:12px 20px;            /* bigger buttons */
+  border-radius:12px;
   font-weight:700;
+  font-size:1rem;
   cursor:pointer;
   transition: .18s ease;
   background:#1b2330; color:#e8eef6;
@@ -146,29 +115,32 @@
 .btn.danger  { background:#ef4444; border-color:#ef4444; color:white; }
 .btn.ghost   { background:transparent; }
 
-/* ========= Live Question ========= */
+.btn-row { display:flex; justify-content:space-between; align-items:center; margin-top: 12px; }
+.btn-left, .btn-right { display:flex; gap:12px; }
+
+/* ========= Live Question prompt ========= */
 .question {
   background:#0d1420;
   border:1px solid rgba(99,102,241,.25);
   color:#dbe6ff;
-  padding:12px 14px;
-  border-radius:10px;
+  padding:14px 16px;
+  border-radius:12px;
   font-weight:600;
   box-shadow: inset 0 0 0 1px rgba(99,102,241,.08);
 }
 
 /* ========= Evaluation (progress bars) ========= */
-.metric { margin:10px 0 14px; }
+.metric { margin:12px 0 16px; }
 .metric .row {
   display:flex; justify-content:space-between;
-  font-size:.9rem; color:#c6d0dd; margin-bottom:6px;
+  font-size:1rem; color:#c6d0dd; margin-bottom:8px;
 }
-.bar { height:10px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
-.fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#5eead4,#22d3ee); }
+.bar { height:12px; border-radius:999px; background:rgba(255,255,255,.08); overflow:hidden; }
+.fill { height:100%; border-radius:999px; background:linear-gradient(90deg,#5eead4,#22d3ee); transition: width .4s ease; }
 .fill.yellow { background:linear-gradient(90deg,#fde047,#f59e0b); }
 .fill.blue   { background:linear-gradient(90deg,#93c5fd,#3b82f6); }
 .fill.purple { background:linear-gradient(90deg,#c084fc,#a855f7); }
 
 /* ========= Utility ========= */
 .row { display:flex; gap:10px; align-items:center; }
-.mute { color:#8fa0b3; font-size:.85rem; }
+.mute { color:#8fa0b3; font-size:.9rem; }
