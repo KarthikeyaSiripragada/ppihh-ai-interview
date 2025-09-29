@@ -1,5 +1,4 @@
-import { supabase } from "../src/lib/supabase";// relative from src/api to src/lib
-
+const EVALUATIONS_STORAGE_KEY = 'interview_evaluations';
 
 export async function insertEvaluation(payload: {
   answer_id: number;
@@ -9,25 +8,39 @@ export async function insertEvaluation(payload: {
   problem_solving: number;
   notes?: string;
 }) {
-  const { data, error } = await supabase.from("evaluations").insert([
-    {
-      answer_id: payload.answer_id,
-      correctness: payload.correctness,
-      efficiency: payload.efficiency,
-      clarity: payload.clarity,
-      problem_solving: payload.problem_solving,
-      notes: payload.notes ?? null,
-    },
-  ]);
-  if (error) throw error;
-  return data?.[0];
+  try {
+    // Get existing evaluations from localStorage
+    const existing = JSON.parse(localStorage.getItem(EVALUATIONS_STORAGE_KEY) || '[]');
+    
+    // Create new evaluation with timestamp
+    const newEvaluation = {
+      id: Date.now(),
+      ...payload,
+      created_at: new Date().toISOString(),
+    };
+    
+    // Add to existing evaluations
+    const updated = [...existing, newEvaluation];
+    
+    // Save back to localStorage
+    localStorage.setItem(EVALUATIONS_STORAGE_KEY, JSON.stringify(updated));
+    
+    return newEvaluation;
+  } catch (error) {
+    console.error('Error saving evaluation locally:', error);
+    throw error;
+  }
 }
 
 export async function getEvaluationsByAnswer(answerId: number) {
-  const { data, error } = await supabase
-    .from("evaluations")
-    .select("*")
-    .eq("answer_id", answerId);
-  if (error) throw error;
-  return data;
+  try {
+    // Get evaluations from localStorage
+    const evaluations = JSON.parse(localStorage.getItem(EVALUATIONS_STORAGE_KEY) || '[]');
+    
+    // Filter by answer_id
+    return evaluations.filter((evaluation: any) => evaluation.answer_id === answerId);
+  } catch (error) {
+    console.error('Error fetching evaluations:', error);
+    return [];
+  }
 }

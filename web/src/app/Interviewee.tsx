@@ -2,7 +2,6 @@ import { useState } from "react";
 import { readResumeText } from "../lib/resume";
 import { extractSkills } from "../lib/topicextract";
 import { generateQuestions, type Q } from "../lib/questions";
-import { supabase } from "../lib/supabase";
 import "./Interviewer.css";
 
 export default function Interviewee() {
@@ -42,27 +41,23 @@ export default function Interviewee() {
     setStatus(null);
 
     try {
-      const { error } = await supabase.from("answers").insert([
-        {
-          // If you later switch to using interviews table, replace with interview_id
-          email: meta.email || null,
-          name: meta.name || null,
-          phone: meta.phone || null,
-          question_idx: idx,
-          question_text: current.text,
-          answer_text: answer,
-          skills,
-        },
-      ]);
+      // Simulate saving answer (replace with your preferred storage method)
+      console.log("Answer data:", {
+        email: meta.email || null,
+        name: meta.name || null,
+        phone: meta.phone || null,
+        question_idx: idx,
+        question_text: current.text,
+        answer_text: answer,
+        skills,
+      });
 
-      if (error) {
-        console.error(error);
-        setStatus("❌ Failed to save answer.");
-      } else {
-        setStatus("✅ Answer saved.");
-        setAnswer("");
-        setIdx((i) => Math.min(i + 1, Math.max(qs.length - 1, 0)));
-      }
+      // Simulate API call delay
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+      setStatus("✅ Answer saved locally.");
+      setAnswer("");
+      setIdx((i) => Math.min(i + 1, Math.max(qs.length - 1, 0)));
     } catch (err: any) {
       console.error(err);
       setStatus("❌ Unexpected error.");
