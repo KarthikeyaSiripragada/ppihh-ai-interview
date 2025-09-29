@@ -2,7 +2,7 @@ import { useState } from "react";
 import { readResumeText } from "../lib/resume";
 import { extractSkills } from "../lib/topicextract";
 import { generateQuestions, type Q } from "../lib/questions";
-import { supabase } from "../lib/supabase"; // 🔑 Supabase client
+import { supabase } from "../lib/supabase";
 import "./Interviewer.css";
 
 export default function Interviewee() {
@@ -17,42 +17,51 @@ export default function Interviewee() {
   async function onResume(e: React.ChangeEvent<HTMLInputElement>) {
     const f = e.target.files?.[0];
     if (!f) return;
-    const text = await readResumeText(f);
-    const found = extractSkills(text);
-    setSkills(found);
-    const six = generateQuestions(found);
-    setQs(six);
-    setIdx(0);
+    try {
+      const text = await readResumeText(f);
+      const found = extractSkills(text || "");
+      setSkills(found);
+      const six = generateQuestions(found);
+      setQs(six);
+      setIdx(0);
+      setStatus("✅ Resume processed — questions generated.");
+    } catch (err) {
+      console.error(err);
+      setStatus("❌ Failed to read resume.");
+    }
   }
 
   const current = qs[idx];
 
   async function submitAnswer() {
-    if (!answer.trim() || !current) return;
+    if (!answer.trim() || !current) {
+      setStatus("Please type an answer before submitting.");
+      return;
+    }
     setLoading(true);
     setStatus(null);
 
     try {
-      // Save to Supabase "answers" table
-      const { error } = await supabase.from("answers").insert({
-        email: meta.email,
-        name: meta.name,
-        phone: meta.phone,
-        question_idx: idx,
-        question_text: current.text,
-        answer_text: answer,
-        skills: skills,
-        created_at: new Date().toISOString(),
-      });
+      const { error } = await supabase.from("answers").insert([
+        {
+          // If you later switch to using interviews table, replace with interview_id
+          email: meta.email || null,
+          name: meta.name || null,
+          phone: meta.phone || null,
+          question_idx: idx,
+          question_text: current.text,
+          answer_text: answer,
+          skills,
+        },
+      ]);
 
       if (error) {
         console.error(error);
         setStatus("❌ Failed to save answer.");
       } else {
         setStatus("✅ Answer saved.");
-        // Reset answer + advance to next Q
         setAnswer("");
-        setIdx((i) => Math.min(i + 1, (qs.length || 1) - 1));
+        setIdx((i) => Math.min(i + 1, Math.max(qs.length - 1, 0)));
       }
     } catch (err: any) {
       console.error(err);
@@ -63,102 +72,107 @@ export default function Interviewee() {
   }
 
   return (
-    <div className="container grid grid-3">
-      {/* LEFT: Resume / identity */}
-      <section className="card">
-        <h2 className="h2">Your Profile</h2>
-        <input
-          className="input"
-          type="file"
-          accept=".pdf,.doc,.docx,.txt"
-          onChange={onResume}
-        />
-        <div style={{ height: 8 }} />
-        <input
-          className="input"
-          placeholder="Full name"
-          value={meta.name}
-          onChange={(e) => setMeta({ ...meta, name: e.target.value })}
-        />
-        <input
-          className="input"
-          placeholder="Email"
-          value={meta.email}
-          onChange={(e) => setMeta({ ...meta, email: e.target.value })}
-        />
-        <input
-          className="input"
-          placeholder="Phone"
-          value={meta.phone}
-          onChange={(e) => setMeta({ ...meta, phone: e.target.value })}
-        />
-        <div style={{ marginTop: 8, color: "#9aa0a6" }}>
-          Detected skills: {skills.length ? skills.join(", ") : "—"}
-        </div>
-      </section>
+    <div className="interviewee-root">
+      <div className="interview-grid">
+        {/* LEFT: Resume / identity */}
+        <section className="card panel left">
+          <h3 className="card-title">Your Profile</h3>
 
-      {/* MIDDLE: Dynamic Q&A */}
-      <section className="card" style={{ padding: 16 }}>
-        <div
-          className="row"
-          style={{ justifyContent: "space-between", marginBottom: 10 }}
-        >
-          <div className="pill">
-            Question {qs.length ? idx + 1 : 0} / {qs.length || 0}
+          <label className="file-label">
+            <input
+              type="file"
+              accept=".pdf,.doc,.docx,.txt"
+              onChange={onResume}
+              className="file-input"
+            />
+            <span className="file-text">Choose resume…</span>
+          </label>
+
+          <input
+            className="input"
+            placeholder="Full name"
+            value={meta.name}
+            onChange={(e) => setMeta({ ...meta, name: e.target.value })}
+          />
+          <input
+            className="input"
+            placeholder="Email"
+            value={meta.email}
+            onChange={(e) => setMeta({ ...meta, email: e.target.value })}
+          />
+          <input
+            className="input"
+            placeholder="Phone"
+            value={meta.phone}
+            onChange={(e) => setMeta({ ...meta, phone: e.target.value })}
+          />
+
+          <div className="meta-row">
+            <div className="muted">Detected skills</div>
+            <div className="skills">
+              {skills.length ? skills.map((s, i) => <span key={i} className="tag">{s}</span>) : <span className="muted">—</span>}
+            </div>
           </div>
-          {current && (
-            <div className="pill">
-              {current.topic} • {current.diff}
-            </div>
-          )}
-        </div>
+        </section>
 
-        {current ? (
-          <>
-            <div className="bubble ai">{current.text}</div>
-            <div className="footer">
-              <textarea
-                className="input"
-                rows={4}
-                placeholder="Type your answer…"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-              />
-              <button
-                className="btn primary"
-                onClick={submitAnswer}
-                disabled={loading}
-              >
-                {loading ? "Saving..." : "Submit"}
-              </button>
-            </div>
-            {status && (
-              <div style={{ marginTop: 8, fontSize: ".85rem", color: "#b7c0cc" }}>
-                {status}
+        {/* MIDDLE: Dynamic Q&A */}
+        <section className="card panel middle">
+          <div className="q-header">
+            <div className="pill">Question {qs.length ? idx + 1 : 0} / {qs.length || 0}</div>
+            {current ? <div className="pill muted small">{current.topic} • {current.diff}</div> : null}
+          </div>
+
+          {current ? (
+            <>
+              <div className="bubble ai">{current.text}</div>
+
+              <div className="answer-area">
+                <textarea
+                  className="textarea"
+                  rows={6}
+                  placeholder="Type your answer here..."
+                  value={answer}
+                  onChange={(e) => setAnswer(e.target.value)}
+                />
+                <div className="actions-row">
+                  <button className="btn ghost" onClick={() => setIdx(i => Math.max(i - 1, 0))} disabled={idx === 0}>Prev</button>
+                  <div style={{display: "flex", gap: 8}}>
+                    <button className="btn secondary" onClick={() => { setAnswer(""); setStatus(null); }}>Clear</button>
+                    <button className="btn primary" onClick={submitAnswer} disabled={loading}>
+                      {loading ? "Saving..." : "Submit"}
+                    </button>
+                  </div>
+                </div>
+                {status && <div className="status">{status}</div>}
               </div>
-            )}
-          </>
-        ) : (
-          <div className="muted">
-            Upload your resume to generate tailored questions.
-          </div>
-        )}
-      </section>
+            </>
+          ) : (
+            <div className="empty-state">Upload your resume to generate tailored questions.</div>
+          )}
+        </section>
 
-      {/* RIGHT: Summary */}
-      <aside className="card">
-        <h2 className="h2">Session Summary</h2>
-        <div className="row">
-          <span className="badge">Total</span>
-          <span className="muted">{qs.length || 0} questions</span>
-        </div>
-        <div className="row">
-          <span className="badge">Progress</span>
-          <span className="muted">
-            {idx + (qs.length ? 1 : 0)}/{qs.length || 0}
-          </span>
-        </div>
-      </aside>
+        {/* RIGHT: Summary */}
+        <aside className="card panel right">
+          <h3 className="card-title">Session Summary</h3>
+
+          <div className="stat">
+            <div className="stat-label">Total</div>
+            <div className="stat-value">{qs.length || 0} questions</div>
+          </div>
+
+          <div className="stat">
+            <div className="stat-label">Progress</div>
+            <div className="stat-value">{qs.length ? `${Math.min(idx + 1, qs.length)}/${qs.length}` : "0/0"}</div>
+          </div>
+
+          <div className="summary-actions">
+            <button className="btn ghost" onClick={() => { setQs([]); setIdx(0); setAnswer(""); setSkills([]); setStatus("Session reset."); }}>
+              Reset
+            </button>
+            <button className="btn primary" onClick={() => setStatus("Export not implemented yet.")}>Export</button>
+          </div>
+        </aside>
+      </div>
     </div>
   );
 }
