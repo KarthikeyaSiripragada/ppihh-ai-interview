@@ -1,14 +1,14 @@
-import { createClient } from '@supabase/supabase-js'
+import { createClient } from "@supabase/supabase-js";
 
-const supabaseUrl = 'https://qwmrbfglgcdkncusmdrd.supabase.co'
-const supabaseKey = import.meta.env.VITE_SUPABASE_ANON_KEY
+const url = import.meta.env.VITE_SUPABASE_URL as string | undefined;
+const anonKey = import.meta.env.VITE_SUPABASE_ANON_KEY as string | undefined;
 
-// Debug logs
-console.log("Supabase URL:", supabaseUrl)
-console.log("Supabase Key:", supabaseKey ? "Exists" : "MISSING")
+console.log("DEBUG: VITE_SUPABASE_URL ->", url);
+console.log("DEBUG: VITE_SUPABASE_ANON_KEY exists ->", !!anonKey);
 
-if (!supabaseKey) {
-  throw new Error("Missing Supabase key. Check .env file.")
+if (!url || !anonKey) {
+  // stops app early so you can see the message in browser console
+  throw new Error("Missing Supabase env vars. Check .env and restart dev server.");
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey)
+export const supabase = createClient(url, anonKey);
