@@ -6,11 +6,9 @@ export async function readResumeText(file: File): Promise<string> {
 
   if (ext.endsWith(".pdf")) {
     // Use top-level API and worker URL (Vite handles the asset)
-    const pdfjs = await import("pdfjs-dist");
-    const workerUrl = (await import("pdfjs-dist/build/pdf.worker.mjs?url")).default;
-
+    const pdfjs = await import("pdfjs-dist/legacy/build/pdf");
     // @ts-ignore - types exist but this keeps TS quiet across versions
-    pdfjs.GlobalWorkerOptions.workerSrc = workerUrl;
+    pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.min.js`;
 
     // @ts-ignore
     const pdf = await pdfjs.getDocument({ data: await file.arrayBuffer() }).promise;
