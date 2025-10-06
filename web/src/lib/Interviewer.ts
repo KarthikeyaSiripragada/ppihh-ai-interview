@@ -51,7 +51,8 @@ function validateIntervieweePayload(payload: CreateIntervieweePayload): void {
 // Storage utilities
 function getStoredInterviewees(): Interviewee[] {
   try {
-    return JSON.parse(localStorage.getItem(INTERVIEWEES_STORAGE_KEY) || '[]');
+    const stored = localStorage.getItem(INTERVIEWEES_STORAGE_KEY) || '[]';
+    return JSON.parse(stored) as Interviewee[];
   } catch (error) {
     console.error('Failed to parse stored interviewees:', error);
     return [];
@@ -75,7 +76,7 @@ export async function createInterviewee(payload: CreateIntervieweePayload): Prom
   const now = new Date().toISOString();
   
   // Check for existing email
-  const existingInterviewee = interviewees.find(item => item.email === payload.email);
+  const existingInterviewee = interviewees.find((item: Interviewee) => item.email === payload.email);
   if (existingInterviewee) {
     throw new Error(`Interviewee with email ${payload.email} already exists`);
   }
@@ -106,7 +107,7 @@ export async function updateInterviewee(
   }
   
   const interviewees = getStoredInterviewees();
-  const index = interviewees.findIndex(item => item.email === email);
+  const index = interviewees.findIndex((item: Interviewee) => item.email === email);
   
   if (index === -1) {
     throw new Error(`Interviewee with email ${email} not found`);
@@ -134,7 +135,7 @@ export async function getIntervieweeByEmail(email: string): Promise<Interviewee 
   }
   
   const interviewees = getStoredInterviewees();
-  return interviewees.find(interviewee => interviewee.email === email) || null;
+  return interviewees.find((interviewee: Interviewee) => interviewee.email === email) || null;
 }
 
 export async function getAllInterviewees(): Promise<Interviewee[]> {
@@ -147,7 +148,7 @@ export async function deleteInterviewee(email: string): Promise<void> {
   }
   
   const interviewees = getStoredInterviewees();
-  const filtered = interviewees.filter(item => item.email !== email);
+  const filtered = interviewees.filter((item: Interviewee) => item.email !== email);
   
   if (filtered.length === interviewees.length) {
     throw new Error(`Interviewee with email ${email} not found`);
@@ -164,10 +165,10 @@ export async function searchInterviewees(query: string): Promise<Interviewee[]> 
   const searchTerm = query.toLowerCase().trim();
   const interviewees = getStoredInterviewees();
   
-  return interviewees.filter(interviewee =>
+  return interviewees.filter((interviewee: Interviewee) =>
     interviewee.name.toLowerCase().includes(searchTerm) ||
     interviewee.email.toLowerCase().includes(searchTerm) ||
-    interviewee.skills.some(skill => skill.toLowerCase().includes(searchTerm))
+    interviewee.skills.some((skill: string) => skill.toLowerCase().includes(searchTerm))
   );
 }
 
@@ -199,7 +200,7 @@ export function getIntervieweesCount(): number {
 
 export function getIntervieweesBySkill(skill: string): Interviewee[] {
   const interviewees = getStoredInterviewees();
-  return interviewees.filter(interviewee =>
-    interviewee.skills.some(s => s.toLowerCase().includes(skill.toLowerCase()))
+  return interviewees.filter((interviewee: Interviewee) =>
+    interviewee.skills.some((s: string) => s.toLowerCase().includes(skill.toLowerCase()))
   );
 }
